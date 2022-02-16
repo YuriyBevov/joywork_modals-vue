@@ -53,9 +53,8 @@
                 padding: 10px;
                 border: 1px solid #d0d0d0;
                 margin-top: 100px;
-            " @click="isModalOpened = !isModalOpened">Показ модалки</button>
+            " @click="isModalOpened = true">Показ модалки</button>
         <!---->
-
 
         <div class="modal" v-if="isModalOpened" @click="closeModalByOverlayClick">
             <div class="modal__container">
@@ -84,9 +83,45 @@
                         <div class="tab__controls" v-if="activeTabID === 'tab_2'">
                             <div class="tab__controls-top">
                                 <div class="tab__controls-filter-container">
-                                    <div class="tab__filter" v-if="isFilterOpened">
-                                        фильтр
-                                    </div>
+                                    <transition name="fadeIn">
+                                        <div class="tab__filter filter" v-if="isFilterOpened">
+                                            <form action="">
+
+                                                <fieldset>
+                                                    <label for="rangeFrom">Расстояние (км):</label>
+                                                    <div>
+                                                        <input type="text" placeholder="от" id="rangeFrom" name="rangeFrom">
+                                                        <input type="text" placeholder="до" name="rangeTo">
+
+                                                        <div class="range">
+                                                            <div class="range__body">
+                                                                <div class="range__inner"></div>
+
+                                                                <div class="range__thumb range__thumb--left" tabindex="0" @mousedown="onMouseOver"></div>
+                                                                <div class="range__thumb range__thumb--right" tabindex="0" @mousedown="onMouseOver"></div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </fieldset>
+
+                                                <fieldset>
+                                                    <label for="area">Общая площадь (м2):</label>
+                                                    <div>
+                                                        <input type="text" placeholder="от" id="area" name="areaFrom">
+                                                        <input type="text" placeholder="до" name="areaTo">
+                                                    </div>
+                                                </fieldset>
+
+                                                <fieldset>
+                                                    <label for="kitchenArea">Площадь кухни (м2):</label>
+                                                    <div>
+                                                        <input type="text" placeholder="от" id="kitchenArea" name="kitchenAreaFrom">
+                                                        <input type="text" placeholder="до" id="kitchenAreaTo">
+                                                    </div>
+                                                </fieldset>
+                                            </form>
+                                        </div>
+                                    </transition>
 
                                     <div class="tab__filter-controls">
                                         <button type="button" class="tab__controls-filter-btn btn-default" @click="isFilterOpened = !isFilterOpened">
@@ -184,7 +219,7 @@
                 activeTabID: 'tab_2',
                 viewType: 'list',
                 isModalOpened: true,
-                isFilterOpened: false,
+                isFilterOpened: true,
                 isAverageModalOpened: false,
                 isObjectModalOpened: false,
                 /*end engine options*/
@@ -211,6 +246,16 @@
 
                     tab.isActive = true;
                     this.activeTabID = tab.id;
+                },
+
+                onMouseMove() {
+                    console.log('onMouseMove')
+                },
+
+                onMouseOver(evt) {
+                    console.log('over', evt.target.getBoundingClientRect())
+
+                    evt.target.addEventListener('mousemove', this.onMouseMove);
                 }
             },
 

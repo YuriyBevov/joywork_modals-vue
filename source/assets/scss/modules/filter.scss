@@ -1,0 +1,123 @@
+.filter {
+    fieldset {
+        display: flex;
+        flex-grow: 1;
+        margin: 0;
+        margin-bottom: 20px;
+        padding: 0;
+        border: 0;
+
+        @media(max-width: $tablet_large) {
+            flex-direction: column;
+        }
+
+        label {
+            display: flex;
+            align-items: center;
+            
+            font-size: 16px;
+            line-height: 19px;
+            padding: 10px 0;
+            width: 40%;
+
+            color: $grey;
+        }
+
+        div {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            width: 60%;
+
+            @media(max-width: $tablet_large) {
+                width: 100%;
+            }
+        }
+
+        input {
+            width: calc(50% - 5px);
+            padding: 17px 14px;
+
+            font-size: 14px;
+            line-height: 17px;
+            border: 1px solid $grey-200;
+            border-radius: 6px;
+
+            color: $grey;
+
+            &::placeholder {
+                font-size: 14px;
+                line-height: 17px;
+
+                color: $grey;
+            }
+
+            &:first-child {
+                margin-right: auto;
+            }
+
+            &[type="range"] {
+                margin: 0;
+                padding: 0;
+                border: 0;
+            }
+        }
+
+        .range {
+            width: 100%;
+            margin-top: 20px;
+            margin-bottom: 10px;
+
+            &__body {
+                position: relative;
+
+                width: 100%;
+                height: 8px;
+                
+                border: 1px solid $grey-200;
+                border-radius: 6px;
+                
+                background-color: transparent;
+            }
+
+            &__thumb {
+                position: absolute;
+
+                top: 50%;
+                transform: translateY(-50%);
+
+                content: '';
+
+                width: 24px;
+                height: 30px;
+                
+                border: 1px solid $grey-100;
+                box-shadow: inset 0px 0px 2px rgba(0, 0, 0, 0.15);
+                border-radius: 3px;
+                background: linear-gradient(180deg, #FEFEFE 0%, #F6F6F6 100%);
+
+                cursor: pointer;
+
+                &--left {
+                    left: 0;
+                    background-color: red;
+                }
+
+                &--right {
+                    right: 0;
+                    background-color: black;
+                }
+            }
+
+            &__inner {
+                position: absolute;
+                top: 0;
+                left: 20%;
+                width: 60%;
+                height: 100%;
+                content: '';
+                background: $mint;
+            }
+        }
+    }
+}

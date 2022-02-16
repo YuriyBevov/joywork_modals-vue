@@ -70,7 +70,16 @@ input, textarea {
   overflow: hidden;
 }
 
-.swiper-button-prev::after,
+/* .swiper-button-prev::after,
 .swiper-button-next::after {
     display: none;
+} */
+
+/* vue transitions */
+.fadeIn-enter-active{
+  transition: opacity .5s;
+}
+
+.fadeIn-enter {
+  opacity: 0;
 }
