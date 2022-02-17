@@ -1,27 +1,56 @@
 .inner-modal {
-    outline: 1px solid red;
     position: fixed;
     top: 0;
-    left: 0;
-    height: 100%;
-    width: 100%;
+    right: 0;
+    height: fit-content;
+    min-height: 100%;
+    width: 80%;
+    max-width: 680px;
     background-color: transparent;
-    z-index: 1000;
-    overflow: hidden;
+    z-index: 100;
 
     &__container {
         position: absolute;
         top: 0;
         right: 0;
-        width: 80%;
-        height: 100%;
-        max-width: 680px;
+        width: 100%;
+        height: fit-content;
+        min-height: 100%;
         padding: 30px;
         background-color: $white;
         box-shadow: -3px 0px 24px rgba(0, 0, 0, 0.25);
         transform: translateX(100%);
 
         animation: showInnerModal 0.7s forwards;
+
+        @media(max-width: $tablet_small) {
+            padding: 10px;
+        }
+    }
+
+    &__header {
+        display: flex;
+        align-items: flex-start;
+        margin-bottom: 30px;
+    }
+
+    &__title {
+        font-family: $f1_reg;
+        font-weight: 400;
+        font-size: 27px;
+        line-height: 1.2;
+        padding-right: 50px;
+        align-self: center;
+
+        color: $black;
+
+        @media(max-width: $tablet_large) {
+            font-size: 22px;
+        }
+
+        @media(max-width: $mobile_large) {
+            font-size: 18px;
+        }
     }
 
     @keyframes showInnerModal {

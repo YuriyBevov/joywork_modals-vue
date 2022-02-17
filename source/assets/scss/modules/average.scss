@@ -1,0 +1,61 @@
+.average {
+    padding-bottom: 20px;
+    
+    &__recomendation {
+        margin-bottom: 20px;
+
+        span {
+            display: inline-block;
+            margin-bottom: 24px;
+        }
+
+        ul {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+
+            @media(max-width: $mobile) {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+
+        li {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            padding-left: 12px;
+            width: calc(100% / 3);
+            max-width: 210px;
+
+            @media(max-width: $mobile) {
+                width: 100%;
+                &:not(:last-child) {
+                    margin-bottom: 24px;
+                }
+            }
+            
+            &::before {
+                position: absolute;
+                top: 50%;
+                left: 0;
+                transform: translateY(-50%);
+
+                width: 2px;
+                height: 34px;
+
+                content: "";
+
+                border-left: 2px solid $green;
+            }
+
+            span {
+                margin-bottom: 0;
+            }
+
+            span:not(:last-child) {
+                margin-bottom: 5px;
+            }
+        }
+    }
+}

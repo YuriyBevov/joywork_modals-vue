@@ -7,6 +7,10 @@
     <title>Document</title>
     <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
     <link rel="stylesheet" href="./assets/css/styles.css">
+    <link
+        rel="stylesheet"
+        href="https://unpkg.com/swiper@8/swiper-bundle.min.css"
+    />
 </head>
 <body>
     <div style="display:none">
@@ -29,7 +33,7 @@
         <!---->
 
         <div class="modal" v-if="isModalOpened" @click="closeModalByOverlayClick">
-            <div class="modal__container">
+            <div class="modal__container"  @click="closeInnerModalByClick">
                 <div class="modal__header">
                     <h2 class="modal__title">{{modalTitle}}</h2>
 
@@ -67,7 +71,6 @@
                                     <transition name="fadeIn">
                                         <div class="tab__filter filter" v-if="isFilterOpened">
                                             <form action="">
-
                                                 <fieldset>
                                                     <label for="rangeFrom">Расстояние (км):</label>
                                                     <div>
@@ -78,8 +81,8 @@
                                                             <div class="range__body">
                                                                 <div class="range__inner"></div>
 
-                                                                <div class="range__thumb range__thumb--left" tabindex="0"  @mousedown="onMouseOver"></div>
-                                                                <div class="range__thumb range__thumb--right" tabindex="0" @mousedown="onMouseOver"></div>
+                                                                <div class="range__thumb range__thumb--left" tabindex="0" @mousedown="onMouseDown"></div>
+                                                                <div class="range__thumb range__thumb--right" tabindex="0" @mousedown="onMouseDown"></div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -159,32 +162,243 @@
                     </div>
 
                     <div class="modal__body">
-                        <div class="" v-if="viewType === 'list'">
-                            Списком
-                        </div>
+                        <transition name="fadeIn">
+                            <div class="object" v-if="viewType === 'list'">
+                                <ul class="object__list">
+                                    <li
+                                        v-for="(object, i) of objectList"
+                                        :key="'object_' + i"
+                                        class="object-card"
+                                    >
+
+                                        <div class="swiper">
+                                            <div class="swiper-wrapper">
+                                                <div
+                                                    class="swiper-slide"
+                                                    v-for="(slide,i) of object.images"
+                                                    :key="'image_' + i"
+                                                >
+                                                    <a :href="'./assets/img/' + slide" target="_blank">
+                                                        <img :src="'./assets/img/' + slide"  width="292" height="342">
+                                                    </a>
+                                                </div>
+                                            </div>
+                                            <div class="swiper-button-prev"></div>
+                                            <div class="swiper-button-next"></div>
+                                        </div>
+
+                                        <div class="object__content">
+
+                                            <div class="object-card__section object-card__header">
+                                                <span class="object-card__text">{{object.published_at}}</span>
+                                                <span class="object-card__text">{{object.status}}</span>
+                                                <span class="object-card__text">ID {{object.id}}</span>
+                                                <a href="#" aria-label="выпадающее меню" class="object-card__btn">
+                                                    <svg width="20" height="20">
+                                                        <use xlink:href="#icon-dropdown"></use>
+                                                    </svg>
+                                                </a>
+                                            </div>
+
+                                            <div class="object-card__section object-card__title">
+                                                <h2>
+                                                    <a href="#" class="object-card__link">
+                                                        {{object.title}}
+                                                    </a>
+                                                </h2>
+                                                <a href="#" aria-label="смотреть" class="object-card__btn">
+                                                    <svg width="28" height="28">
+                                                        <use xlink:href="#icon-eye"></use>
+                                                    </svg>
+                                                </a>
+                                            </div>
+
+                                            <div class="object-card__section object-card__content">
+
+                                                <div class="object-card__content-left">
+                                                    <span class="object-card__text">{{object.district}}</span>
+                                                    <span class="object-card__text object-card__text--black">{{object.address}}</span>
+                                                    <span class="object-card__text">
+                                                        Ссылка на источник:
+                                                        <a href="#">{{object.ref}}</a>
+                                                    </span>
+                                                </div>
+
+                                                <div class="object-card__content-right">
+                                                    <span class="object-card__text object-card__text--black">{{object.totalArea}} кв. м</span>
+                                                    <span class="object-card__text">Жилая: {{object.liveArea}} кв. м</span>
+                                                    <span class="object-card__text object-card__text--black">{{object.floor}} этаж из {{object.totalFloor}}</span>
+                                                </div>
+
+                                            </div>
+
+                                            <div class="object-card__section object-card__action">
+                                                <a href="#" aria-label="скачать pdf" class="object-card__action-link object-card__action-link--red">
+                                                    <svg width="44" height="13">
+                                                        <use xlink:href="#icon-pdf_2"></use>     
+                                                    </svg>
+                                                </a>
+
+                                                <a href="#" aria-label="перейти в контакт" class="object-card__action-link object-card__action-link--blue">
+                                                    <svg width="24" height="24">
+                                                        <use xlink:href="#icon-vk"></use>     
+                                                    </svg>
+                                                </a>
+
+                                                <a href="#" aria-label="перейти в контакт" class="object-card__action-link">
+                                                    <svg width="16" height="16">
+                                                        <use xlink:href="#icon-download"></use>     
+                                                    </svg>
+                                                </a>
+
+                                                <a href="#" aria-label="перейти в контакт" class="object-card__action-link">
+                                                    <span>Задачи</span>
+                                                </a>
+
+                                                <a href="#" aria-label="перейти в контакт" class="object-card__action-link">
+                                                    <span>Автопоиск</span>
+                                                </a>
+
+                                                <a href="#" aria-label="перейти в контакт" class="object-card__action-link">
+                                                    <svg width="16" height="16">
+                                                        <use xlink:href="#icon-note"></use>     
+                                                    </svg>
+                                                </a>
+                                            </div>
+
+                                            <div class="object-card__section object-card__footer">
+
+                                                <div class="object-card__footer-price">
+                                                    <span>8 000 000 p</span>
+                                                    <svg width="14" height="14">
+                                                        <use xlink:href="#icon-price-down"></use>
+                                                    </svg>
+                                                </div>
+
+                                                <div class="object-card__footer-contacts">
+                                                    <div class="object-card__footer-contacts-wrapper">
+                                                        <a href="#" class="object-card__text object-card__text--light">
+                                                            На карте
+                                                        </a>
+                                                        <a href="#" class="object-card__text object-card__text--light">
+                                                            Описание
+                                                        </a>
+                                                    </div>
+
+                                                    <span class="object-card__text object-card__text--light">Екатерина Владимировна Браун</span>
+                                                    <a href="tel:89819201791" class="object-card__footer-contacts-phone">89819201791</a>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </transition>
                         <div class="" v-if="viewType === 'map'">
                             На карте
                         </div>
                     </div>
-                </div>
 
-                <div class="inner-modal average-modal" v-if="isAverageModalOpened" @click="closeModalByOverlayClick">
-                    <div class="inner-modal__container average-modal__container">
-                        <div class="modal__header">
-                            <h2 class="modal__title">Средние цены</h2>
-        
-                            <button type="button" @click="isAverageModalOpened = false" class="modal__close btn-default">
-                                <svg width="18" height="18">
-                                    <use xlink:href="#icon-close"></use>
-                                </svg>
-                            </button>
+                    <div class="inner-modal average-modal" v-if="isAverageModalOpened">
+                        <div class="inner-modal__container average-modal__container">
+                            <div class="inner-modal__header">
+                                <h2 class="inner-modal__title">Средние цены</h2>
+            
+                                <button type="button" @click="isAverageModalOpened = false" class="modal__close btn-default">
+                                    <svg width="18" height="18">
+                                        <use xlink:href="#icon-close"></use>
+                                    </svg>
+                                </button>
+                            </div>
+    
+                            <div class="average">
+                                <div class="average-table">
+                                    <span class="average-table__title">Среднерыночная стоимость «Квадратного&nbspметра»</span>
+    
+                                    <div class="average-table__content">
+                                        <div class="average-table__row">
+                                            <div class="average-table__row-pricelist">
+                                                <span class="average-table__text">Демпинговые цены от:</span>
+                                                <span class="average-table__text average-table__text--red">2 000 000 – 3 000 000 р</span>
+                                            </div>
+                                        </div>
+                                        <div class="average-table__row">
+                                            <div class="average-table__row-pricelist">
+                                                <span class="average-table__text">Средние цены от:</span>
+                                                <span class="average-table__text average-table__text--yellow">3 000 000 – 5 000 000 р</span>
+                                            </div>
+                                        </div>
+                                        <div class="average-table__row">
+                                            <div class="average-table__row-pricelist">
+                                                <span class="average-table__text">Высокие цены от:</span>
+                                                <span class="average-table__text average-table__text--green">5 000 000 – 8 000 000 р</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="average-table">
+                                    <span class="average-table__title">Среднерыночная стоимость «Объекта»</span>
+                                    <div class="average-table__content">
+                                    <div class="average-table__row">
+                                        <div class="average-table__row-pricelist">
+                                            <span class="average-table__text">Демпинговые цены от:</span>
+                                            <span class="average-table__text average-table__text--red">2 000 000 – 3 000 000 р</span>
+                                        </div>
+                                        <a href="#">Объекты в сравнении</a>
+                                    </div>
+                                    <div class="average-table__row">
+                                        <div class="average-table__row-pricelist">
+                                            <span class="average-table__text">Средние цены от:</span>
+                                            <span class="average-table__text average-table__text--yellow">3 000 000 – 5 000 000 р</span>
+                                        </div>
+                                        <a href="#">Объекты в сравнении</a>
+                                    </div>
+                                    <div class="average-table__row">
+                                        <div class="average-table__row-pricelist">
+                                            <span class="average-table__text">Высокие цены от:</span>
+                                            <span class="average-table__text average-table__text--green">155 000 000 р – 300 000 000 р</span>
+                                        </div>
+                                        <a href="#">Объекты в сравнении</a>
+                                    </div>
+                                    </div>
+                                </div>
+                                <div class="average__recomendation">
+                                    <span class="average-table__title">Рекомендованная цена продажи</span>
+                                    <ul>
+                                        <li>
+                                            <span class="average-table__text">За 12 месяцев:</span>
+                                            <span class="average-table__text average-table__text--bold">300 000 000 р</span>
+                                        </li>
+                                        <li>
+                                            <span class="average-table__text">За 3 месяца:</span>
+                                            <span class="average-table__text average-table__text--bold">300 200 000 р</span>
+                                        </li>
+                                        <li>
+                                            <span class="average-table__text">Сделка завтра:</span>
+                                            <span class="average-table__text average-table__text--bold">300 150 000 р</span>
+                                        </li>
+                                    </ul>
+                                </div>
+    
+                                <a 
+                                    href="#"
+                                    class="btn-default average-table__report-btn"
+                                >
+                                    <svg width="18" height="18">
+                                        <use xlink:href="#icon-pdf"></use>
+                                    </svg>
+                                    
+                                    <span>Сформировать отчет для клиента</span>
+                                </a>
+                            </div>
                         </div>
                     </div>
-                </div>
-
-                <div class="inner-modal object-modal" v-if="isObjectModalOpened">
-                    <div class="inner-modal__container object-modal__container">
-                        Модалка в картах
+    
+                    <div class="inner-modal object-modal" v-if="isObjectModalOpened">
+                        <div class="inner-modal__container object-modal__container">
+                            Модалка в картах
+                        </div>
                     </div>
                 </div>
             </div>
@@ -192,6 +406,10 @@
     </div>
 
     <script>
+        let body, bodyWidth, bodyStartCoord, 
+            bodyEndCoord, activeThumbStartCoord, passiveThumbStartCoord,
+            activeThumb, passiveThumb;
+
         var app = new Vue({
             el: '#modal',
 
@@ -216,6 +434,44 @@
                         isActive: false,
                     }
                 ],
+
+                objectList: [
+                    {
+                        title: 'Комната Санкт-Петербург Литейный просп., 59 (56.0 м)',
+                        images: [
+                            'slide_1.jpg', 'slide_2.jpg', 'slide_3.jpg'
+                        ],
+
+                        published_at: '15 января 2022 18:34',
+                        status: 'Продается',
+                        id: '12345678',
+                        district: 'Центральный район',
+                        address: 'Санкт-Петербург, Литейный просп., 59',
+                        ref: 'Циан',
+                        commonArea: '56',
+                        liveArea: '46',
+                        floor: '3',
+                        totalFloor: '5'
+                    },
+
+                    {
+                        title: 'Комната 56 м в 6-к., 3/5 эт.',
+                        images: [
+                            'slide_1.jpg', 'slide_2.jpg', 'slide_3.jpg'
+                        ],
+
+                        published_at: '15 января 2022 18:34',
+                        status: 'Сдается',
+                        id: '12945678',
+                        district: 'Фрунзенский район',
+                        address: 'Санкт-Петербург, Ярослава Гашека, 30/5',
+                        ref: 'Циан',
+                        commonArea: '516',
+                        liveArea: '460',
+                        floor: '14',
+                        totalFloor: '51'
+                    }
+                ],
                 /*end content*/
 
                 /*engine options*/
@@ -225,21 +481,26 @@
                 isFilterOpened: true,
                 isAverageModalOpened: false,
                 isObjectModalOpened: false,
+
+                /*filter*/
+
+                    
+
+                /**/
                 /*end engine options*/
             },
 
             methods: {
                 closeModalByOverlayClick(evt) {
                     const overlay = document.querySelector('.modal');
-                    const averageModalOverlay = document.querySelector('.average-modal');
 
                     if( evt.target === overlay ) {
                         this.isModalOpened = false;
                     }
+                },
 
-                    if(evt.target === averageModalOverlay) {
-                        this.isAverageModalOpened = false;
-                    }
+                closeInnerModalByClick(evt) {
+                   console.log('click by container', evt.target);
                 },
 
                 onClickChangeTab(tab) {
@@ -251,14 +512,59 @@
                     this.activeTabID = tab.id;
                 },
 
-                onMouseMove() {
-                    console.log('onMouseMove')
+                onMouseMove(evt) {
+                    // console.log('onMouseMove', body, bodyWidth, bodyStartCoord, bodyEndCoord, activeThumb, passiveThumb);
+                    // console.log(evt.clientX, activeThumbStartCoord)
+
+                    // let currentPosX = evt.clientX;
+                    
+                    // activeThumb.style.transform = "translate(" + ( evt.clientX - bodyWidth ) + "px, -50%)";
+                    // activeThumbStartCoords = evt.clientX - (activeThumbStartCoord + 12);
                 },
 
-                onMouseOver(evt) {
-                    console.log('over', evt.target.getBoundingClientRect())
+                onMouseDown(evt) {
+                    /*тело ползунка*/
+                    body = evt.target.parentNode;
+                    /*ширина тела ползунка*/
+                    bodyWidth = body.getBoundingClientRect().width;
+
+                    /*активный ползунок, пассивный ползунок*/
+                    activeThumb = evt.target;
+                    passiveThumb = 
+                        evt.target.classList.contains('range__thumb--left') ? 
+                        document.querySelector('.range__thumb--right'): 
+                        document.querySelector('.range__thumb--left');
+                    
+                    
+                    /*координаты тела ползунка относительно страницы*/
+                    /*bodyStartCoord = body.getBoundingClientRect().left;
+                    bodyEndCoord = body.getBoundingClientRect().right;
+                    console.log(bodyStartCoord, bodyEndCoord);*/
+
+                    /* позиция активного ползунка */
+                    /*activeThumbStartCoord = activeThumb.getBoundingClientRect().left;
+                    activeThumbEndCoord = activeThumb.getBoundingClientRect().right;
+                    /* позиция пассивного ползунка */
+                    /*passiveThumbStartCoord = passiveThumb.getBoundingClientRect().left;
+                    passiveThumbEndCoord = passiveThumb.getBoundingClientRect().right;*/
+
+                    //activeThumbStartCoords = activeThumb.style.transform.translate;
+                    //console.log(activeThumbStartCoords)
+                    /* позиция мыши */
+
+                    
+                    /*console.log('activeThumbCoords: ', activeThumbStartCoord, activeThumbEndCoord);
+
+                    console.log('passiveThumbCoords: ', passiveThumbStartCoord, passiveThumbEndCoord);*/
 
                     evt.target.addEventListener('mousemove', this.onMouseMove);
+                    evt.target.addEventListener('mouseup', this.onMouseUp);
+                },
+
+                onMouseUp(evt) {
+                    //console.log('mouseup', activeThumbStartCoord);
+
+                    evt.target.removeEventListener('mousemove', this.onMouseMove);
                 }
             },
 
@@ -274,9 +580,21 @@
                         this.activeTabID = 'tab_2';
                         this.tabs[1].isActive = true;
                     }
-                }
+                },
             }
         })
+    </script>
+    <script src="https://unpkg.com/swiper@8/swiper-bundle.min.js"></script>
+    <script>
+        new Swiper('.swiper', {
+            slidesPerView: '1',
+            spaceBetween: 10,
+
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
+            },
+        });
     </script>
 </body>
 </html>
